@@ -12,6 +12,7 @@ body {
   #gameCanvas {
     border: 2px solid #333;
     margin-right: 20px;
+    background: url('https://s3.envato.com/files/245059404/GameBG%20(2).png');
   }
   
   #chatContainer {

@@ -150,9 +150,10 @@ function  handlePlayerMovement(playerId, key) {
     return newObstacles;
   }
 
-  
-
-
+  setInterval(() => {
+    obstacles = generateObstaclePositions();
+    io.emit('obstacleUpdate', obstacles);
+  }, 5000); // Update obstacles every 5 seconds
   
 
 

@@ -5,9 +5,15 @@ const ctx = canvas.getContext('2d')
 const socket = io();
 
 const avatarImage = new Image();
-avatarImage.src = "https://images.unsplash.com/photo-1607746882042-944635dfe10e?w=400&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fGF2YXRhcnxlbnwwfHwwfHx8MA%3D%3D"
+avatarImage.src = "/images/boy-running.gif"
 const obstacleImage = new Image();
 obstacleImage.src = 'images/obstacle.png'; // You need to have an obstacle image
+
+const groundImage = new Image();
+groundImage.src = 'https://s3.envato.com/files/245059404/GameBG%20(2).png'
+
+
+
 
 let players = {};
 let obstacles = [];
@@ -59,6 +65,8 @@ socket.on('gameOver', () => {
 });
 
 function drawGame() {
+    // ctx.drawImage(groundImage, 0, 0, canvas.width, canvas.height);
+
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     drawObstacles();
     drawPlayers();
@@ -72,9 +80,32 @@ window.addEventListener('keydown', (e) => {
     socket.emit('movement', movement);
   });
 
+function drawPlayers() {
+    Object.values(players).forEach((player) => {
+        ctx.drawImage(avatarImage, player.x, player.y, 50, 50);
+
+        // Display player scores
+        ctx.fillStyle = '#000';
+        ctx.font = '14px Arial';
+        ctx.fillText(`Score: ${player.score}`, player.x, player.y - 10);
+    });
+}
+
+// Draw obstacles on the canvas
+function drawObstacles() {
+    obstacles.forEach((obstacle) => {
+        ctx.drawImage(obstacleImage, obstacle.x, obstacle.y, 50, 50);
+    });
+}
 
 
-
+function drawGameOver() {
+    ctx.fillStyle = '#000';
+    ctx.font = '30px Arial';
+    ctx.fillText('Game Over', canvas.width / 2 - 100, canvas.height / 2 - 15);
+    ctx.font = '16px Arial';
+    ctx.fillText('Press R to restart', canvas.width / 2 - 90, canvas.height / 2 + 20);
+}
 
 
 window.addEventListener('keydown', (e) => {
@@ -87,7 +118,6 @@ window.addEventListener('keydown', (e) => {
 
 
 function displayChatMessage(message) {
-    // we are showing messages in div
     const chatLog = document.getElementById('chatLog');
     const messageElement = document.createElement('div');
     messageElement.textContent = message;
